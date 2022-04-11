@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StarszTDD.Services
+namespace StraszTDD.Services
 {
     public class ShufflerService<T>
     {

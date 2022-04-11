@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace StarszTDDTests.Helpers
+namespace StraszTDDTests.Helpers
 {
     public static class RandomizeHelper
     {

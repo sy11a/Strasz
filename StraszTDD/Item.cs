@@ -1,4 +1,4 @@
-﻿namespace StarszTDD
+﻿namespace StraszTDD
 {
     public class Item
     {

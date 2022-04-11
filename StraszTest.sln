@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarszTDD", "StarszTDD\StarszTDD.csproj", "{67F8A589-01F8-4E84-BF34-2C72CCD9B205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StraszTDD", "StraszTDD\StraszTDD.csproj", "{67F8A589-01F8-4E84-BF34-2C72CCD9B205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarszTDDTests", "StarszTDDTests\StarszTDDTests.csproj", "{8BF9CD22-EAFF-4377-BF6A-44F8A215ECB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StraszTDDTests", "StraszTDDTests\StraszTDDTests.csproj", "{8BF9CD22-EAFF-4377-BF6A-44F8A215ECB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

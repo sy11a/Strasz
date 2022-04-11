@@ -1,9 +1,9 @@
-﻿using StarszTDD.Services;
+﻿using StraszTDD.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StarszTDD
+namespace StraszTDD
 {
     public class Testlet
     {

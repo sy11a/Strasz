@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StarszTDD
+namespace StraszTDD
 {
     public static class ValidatorExtension
     {

@@ -1,6 +1,6 @@
-using StarszTDD;
-using StarszTDD.Services;
-using StarszTDDTests.Helpers;
+using StraszTDD;
+using StraszTDD.Services;
+using StraszTDDTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Reflection;
 using Xunit;
 
 
-namespace StarszTDDTests
+namespace StraszTDDTests
 {
     public class TestletTests
     {
@@ -127,6 +127,5 @@ namespace StarszTDDTests
             return testItems;
         }
 
-        
     }
 }
