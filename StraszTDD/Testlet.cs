@@ -13,9 +13,19 @@ namespace StraszTDD
 
         private ShufflerService<Item> _shufflerService;
 
-        private const int _firstOrderPretestAmount = 2;
+        private const int _priorityItemsAmount = 2;
         private const int _pretestAmount = 4;
         private const int _operationalAmount = 6;
+
+        private IEnumerable<Item> _validItems 
+        {
+            get => _items
+                .Validate(list => CountValidation(ItemTypeEnum.Operational, _operationalAmount))
+                .Validate(list => CountValidation(ItemTypeEnum.Pretest, _pretestAmount));
+        }
+
+        private bool CountValidation(ItemTypeEnum type, int count) 
+            =>_items.Where(item => item.ItemType == type).Count() == count;
 
         public Testlet(string testletId, List<Item> items, ShufflerService<Item> shufflerService)
         {
@@ -26,33 +36,20 @@ namespace StraszTDD
 
         public IEnumerable<Item> Randomize()
         {
-            Item[] sortedItems = _items
-                .Validate(list => list.Where(item => item.ItemType == ItemTypeEnum.Operational).Count() == _operationalAmount)
-                .Validate(list => list.Where(item => item.ItemType == ItemTypeEnum.Pretest).Count() == _pretestAmount)
-                .ToArray();
+            Item[] randomizedItems = _validItems.ToArray();
 
-           _shufflerService.RandomShuffle(sortedItems);
+           _shufflerService.RandomShuffle(randomizedItems);
 
-            var pretestItems = sortedItems
+            var indexSwapPairs = randomizedItems
                 .Where(item => item.ItemType == ItemTypeEnum.Pretest)
-                .Take(_firstOrderPretestAmount);
+                .Take(_priorityItemsAmount)
+                .Select((item, index) => (index, Array.IndexOf(randomizedItems, item)));
 
-            int swapIndex = 0;
+            foreach(var (currentIndex, targetIndex) in indexSwapPairs)
+                _shufflerService.Swap(ref randomizedItems[currentIndex], ref randomizedItems[targetIndex]);
 
-            while(swapIndex < _firstOrderPretestAmount)
-            {
-                var priorityElement = pretestItems.ElementAt(swapIndex);
-
-                var currentIndex = Array.IndexOf(sortedItems, priorityElement);
-
-                _shufflerService.SwapElements(sortedItems, currentIndex, swapIndex);
-
-                swapIndex++;
-            }
-
-            return sortedItems;
+            return randomizedItems;
 
         }
-
     }
 }

@@ -9,7 +9,6 @@ namespace StraszTDD
             => validationRule(list) ? list : throw new TestletDataException();
 
     }
-
     public class TestletDataException : Exception
     {
 

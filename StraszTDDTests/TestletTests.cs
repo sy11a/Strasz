@@ -19,8 +19,8 @@ namespace StraszTDDTests
 
             var result = testlet.Randomize();
 
-            int firstOrderPretestAmount = (int)(typeof(Testlet)
-                .GetField("_firstOrderPretestAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
+            int priorityItemsAmount = (int)(typeof(Testlet)
+                .GetField("_priorityItemsAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
 
             int pretestAmount = (int)(typeof(Testlet)
                 .GetField("_pretestAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
@@ -34,7 +34,7 @@ namespace StraszTDDTests
 
             Assert.Equal(_itemListLength, result.Count());
 
-            result.Take(firstOrderPretestAmount)
+            result.Take(priorityItemsAmount)
                 .Select(x => x.ItemType)
                 .ToList()
                 .ForEach(x => Assert.True(x == ItemTypeEnum.Pretest));

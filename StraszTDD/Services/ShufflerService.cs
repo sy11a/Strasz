@@ -13,22 +13,15 @@ namespace StraszTDD.Services
 
         public void RandomShuffle(T[] items)
         {
-            int n = items.Length;
-
-            while(n > 0)
-            {
-                int k = _rnd.Next(n);
-                n--;
-
-                SwapElements(items, n, k);
-            }
+            for (int i = items.Length; i > 0; i--)
+                Swap(ref items[i - 1], ref items[_rnd.Next(i)]);
         }
 
-        public void SwapElements(T[] items, int n, int k)
+        public void Swap(ref T a, ref T b)
         {
-            T item = items[n];
-            items[n] = items[k];
-            items[k] = item;
+            T tempswap = a;
+            a = b;
+            b = tempswap;
         }
     }
 }
