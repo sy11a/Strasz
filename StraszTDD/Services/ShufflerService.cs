@@ -20,13 +20,19 @@ namespace StraszTDD.Services
 
         public void Prioritize(T[] items, int priorityAmount, Func<T,bool> priorityRule)
         {
-            var indexSwapPairs = items
-               .Where(item => priorityRule(item))
-               .Take(priorityAmount)
-               .Select((item, index) => (Array.IndexOf(items, item), index));
+            var itemsToPrioritize = items.Where(x => priorityRule(x)).Take(priorityAmount);
+            
+            int targetIndex = 0;
 
-            foreach (var (currentIndex, targetIndex) in indexSwapPairs)
-                Swap(ref items[currentIndex], ref items[targetIndex]);
+            foreach(var item in itemsToPrioritize)
+            {
+                int itemIndex = Array.IndexOf(items, item);
+
+                Swap(ref items[itemIndex], ref items[targetIndex]);
+
+                targetIndex++;
+            }
+
         }
 
         private void Swap(ref T a, ref T b)
