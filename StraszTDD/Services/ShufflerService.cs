@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace StraszTDD.Services
 {
@@ -17,7 +18,18 @@ namespace StraszTDD.Services
                 Swap(ref items[i - 1], ref items[_rnd.Next(i)]);
         }
 
-        public void Swap(ref T a, ref T b)
+        public void Prioritize(T[] items, int priorityAmount, Func<T,bool> priorityRule)
+        {
+            var indexSwapPairs = items
+               .Where(item => priorityRule(item))
+               .Take(priorityAmount)
+               .Select((item, index) => (Array.IndexOf(items, item), index));
+
+            foreach (var (currentIndex, targetIndex) in indexSwapPairs)
+                Swap(ref items[currentIndex], ref items[targetIndex]);
+        }
+
+        private void Swap(ref T a, ref T b)
         {
             T tempswap = a;
             a = b;

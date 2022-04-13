@@ -4,7 +4,6 @@ using StraszTDDTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Xunit;
 
 
@@ -19,28 +18,19 @@ namespace StraszTDDTests
 
             var result = testlet.Randomize();
 
-            int priorityItemsAmount = (int)(typeof(Testlet)
-                .GetField("_priorityItemsAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
-
-            int pretestAmount = (int)(typeof(Testlet)
-                .GetField("_pretestAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
-
-            int operationalAmount = (int)(typeof(Testlet)
-                .GetField("_operationalAmount", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy).GetValue(testlet));
-
             Assert.NotNull(result);
 
             Assert.NotEmpty(result);
 
-            Assert.Equal(_itemListLength, result.Count());
+            Assert.Equal(ITEM_LIST_LENGTH, result.Count());
 
-            result.Take(priorityItemsAmount)
+            result.Take(Config.TESTLET_PRIORITY_AMOUNT)
                 .Select(x => x.ItemType)
                 .ToList()
                 .ForEach(x => Assert.True(x == ItemTypeEnum.Pretest));
 
-            Assert.Equal(operationalAmount, result.Where(x => x.ItemType == ItemTypeEnum.Operational).Count());
-            Assert.Equal(pretestAmount, result.Where(x => x.ItemType == ItemTypeEnum.Pretest).Count());
+            Assert.Equal(Config.TESTLET_OPERATIONAL_AMOUNT, result.Where(x => x.ItemType == ItemTypeEnum.Operational).Count());
+            Assert.Equal(Config.TESTLET_PRETEST_AMOUNT, result.Where(x => x.ItemType == ItemTypeEnum.Pretest).Count());
 
             Assert.True(result.Distinct().Count() == result.Count());
         }
@@ -99,8 +89,8 @@ namespace StraszTDDTests
             Assert.Throws<TestletDataException>(() => testlet.Randomize());
         }
 
-        private const int _itemListLength = 10;
-        private const int _randomStringLength = 7;
+        private const int ITEM_LIST_LENGTH = 10;
+        private const int RANDOM_STRING_LENGTH = 7;
 
         private Testlet TestletSetUp(int operationalItems, int pretestItems)
         {
@@ -109,7 +99,7 @@ namespace StraszTDDTests
             testletItemsSetUp.Add(ItemTypeEnum.Pretest, pretestItems);
             var shufflerService = new ShufflerService<Item>(new Random());
 
-            return new Testlet(RandomizeHelper.GetRandomString(_randomStringLength), GetTestletItmes(testletItemsSetUp), shufflerService);
+            return new Testlet(RandomizeHelper.GetRandomString(RANDOM_STRING_LENGTH), GetTestletItmes(testletItemsSetUp), shufflerService);
         }
 
         private List<Item> GetTestletItmes(IDictionary<ItemTypeEnum,int> itemsTypeCount)
@@ -120,7 +110,7 @@ namespace StraszTDDTests
             {
                 for(int i =0; i<item.Value; i++)
                 {
-                    testItems.Add(new Item() {ItemId = RandomizeHelper.GetRandomString(_randomStringLength), ItemType = item.Key });
+                    testItems.Add(new Item() {ItemId = RandomizeHelper.GetRandomString(ITEM_LIST_LENGTH), ItemType = item.Key });
                 }
             }
 

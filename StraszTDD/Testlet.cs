@@ -1,5 +1,4 @@
 ﻿using StraszTDD.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,15 +12,11 @@ namespace StraszTDD
 
         private ShufflerService<Item> _shufflerService;
 
-        private const int _priorityItemsAmount = 2;
-        private const int _pretestAmount = 4;
-        private const int _operationalAmount = 6;
-
         private IEnumerable<Item> _validItems 
         {
             get => _items
-                .Validate(list => CountValidation(ItemTypeEnum.Operational, _operationalAmount))
-                .Validate(list => CountValidation(ItemTypeEnum.Pretest, _pretestAmount));
+                .Validate(list => CountValidation(ItemTypeEnum.Operational, Config.TESTLET_OPERATIONAL_AMOUNT))
+                .Validate(list => CountValidation(ItemTypeEnum.Pretest, Config.TESTLET_PRETEST_AMOUNT));
         }
 
         private bool CountValidation(ItemTypeEnum type, int count) 
@@ -36,20 +31,15 @@ namespace StraszTDD
 
         public IEnumerable<Item> Randomize()
         {
-            Item[] randomizedItems = _validItems.ToArray();
+            Item[] items = _validItems.ToArray();
 
-           _shufflerService.RandomShuffle(randomizedItems);
+           _shufflerService.RandomShuffle(items);
 
-            var indexSwapPairs = randomizedItems
-                .Where(item => item.ItemType == ItemTypeEnum.Pretest)
-                .Take(_priorityItemsAmount)
-                .Select((item, index) => (index, Array.IndexOf(randomizedItems, item)));
+           _shufflerService.Prioritize(
+               items,  Config.TESTLET_PRIORITY_AMOUNT, 
+               (item) => item.ItemType == ItemTypeEnum.Pretest);
 
-            foreach(var (currentIndex, targetIndex) in indexSwapPairs)
-                _shufflerService.Swap(ref randomizedItems[currentIndex], ref randomizedItems[targetIndex]);
-
-            return randomizedItems;
-
+            return items;
         }
     }
 }
