@@ -8,30 +8,26 @@ namespace StraszTDD
     {
         public string TestletId;
 
-        private List<Item> _items;
+        private IEnumerable<Item> _items;
 
         private ShufflerService<Item> _shufflerService;
 
-        private IEnumerable<Item> _validItems 
-        {
-            get => _items
-                .Validate(list => CountValidation(ItemTypeEnum.Operational, Config.TESTLET_OPERATIONAL_AMOUNT))
-                .Validate(list => CountValidation(ItemTypeEnum.Pretest, Config.TESTLET_PRETEST_AMOUNT));
-        }
+        private bool CountValidation(IEnumerable<Item> items, ItemTypeEnum type, int count) 
+            => items.Where(item => item.ItemType == type).Count() == count;
 
-        private bool CountValidation(ItemTypeEnum type, int count) 
-            =>_items.Where(item => item.ItemType == type).Count() == count;
-
-        public Testlet(string testletId, List<Item> items, ShufflerService<Item> shufflerService)
+        public Testlet(string testletId, IEnumerable<Item> items, ShufflerService<Item> shufflerService)
         {
             TestletId = testletId;
+
             _shufflerService = shufflerService;
-            _items = items;
+
+            _items = items.Validate(list => CountValidation(list, ItemTypeEnum.Operational, Config.TESTLET_OPERATIONAL_AMOUNT))
+                          .Validate(list => CountValidation(list, ItemTypeEnum.Pretest, Config.TESTLET_PRETEST_AMOUNT));
         }
 
         public IEnumerable<Item> Randomize()
         {
-            Item[] items = _validItems.ToArray();
+            Item[] items = _items.ToArray();
 
            _shufflerService.RandomShuffle(items);
 

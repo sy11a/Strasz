@@ -14,7 +14,7 @@ namespace StraszTDDTests
         [Fact]
         public void ShouldReturnSortedListOfItems()
         {
-            var testlet = TestletSetUp(6, 4);
+            var testlet = TestletSetUp(GetTestletItmes(6,4), new ShufflerService<Item>(new Random()));
 
             var result = testlet.Randomize();
 
@@ -68,7 +68,7 @@ namespace StraszTDDTests
         {
             for(int i = 0; i < 1000; i++)
             {
-                var testlet = TestletSetUp(6, 4);
+                var testlet = TestletSetUp(GetTestletItmes(6, 4), new ShufflerService<Item>(new Random()));
 
                 var testletResult = testlet.Randomize();
                 var testletResult2 = testlet.Randomize();
@@ -85,25 +85,25 @@ namespace StraszTDDTests
         [InlineData(20, 20)]
         public void ShouldThrowExceptrionIfDataSizeNotCorrect(int operationalItems, int pretestItems)
         {
-            var testlet = TestletSetUp(operationalItems, pretestItems);
-            Assert.Throws<TestletDataException>(() => testlet.Randomize());
+            var shufflerService = new ShufflerService<Item>(new Random());
+            Assert.Throws<TestletDataException>(() 
+                => new Testlet("exceptionTest", GetTestletItmes(operationalItems, pretestItems), shufflerService));
         }
 
         private const int ITEM_LIST_LENGTH = 10;
         private const int RANDOM_STRING_LENGTH = 7;
 
-        private Testlet TestletSetUp(int operationalItems, int pretestItems)
+        private Testlet TestletSetUp(List<Item> testletItems, ShufflerService<Item> shufflerService)
         {
-            var testletItemsSetUp = new Dictionary<ItemTypeEnum, int>();
-            testletItemsSetUp.Add(ItemTypeEnum.Operational, operationalItems);
-            testletItemsSetUp.Add(ItemTypeEnum.Pretest, pretestItems);
-            var shufflerService = new ShufflerService<Item>(new Random());
-
-            return new Testlet(RandomizeHelper.GetRandomString(RANDOM_STRING_LENGTH), GetTestletItmes(testletItemsSetUp), shufflerService);
+            return new Testlet(RandomizeHelper.GetRandomString(RANDOM_STRING_LENGTH), testletItems, shufflerService);
         }
 
-        private List<Item> GetTestletItmes(IDictionary<ItemTypeEnum,int> itemsTypeCount)
+        private List<Item> GetTestletItmes(int operationalItems, int pretestItems)
         {
+            var itemsTypeCount = new Dictionary<ItemTypeEnum, int>();
+            itemsTypeCount.Add(ItemTypeEnum.Operational, operationalItems);
+            itemsTypeCount.Add(ItemTypeEnum.Pretest, pretestItems);
+
             List<Item> testItems = new List<Item>();
 
             foreach(var item in itemsTypeCount)
